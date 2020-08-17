@@ -1,0 +1,7 @@
+1. Umieścić skrypt "qtapp" w folderze /etc/init.d/
+2. Skompilować program "autorestart.c"
+3. Umieścić skompilowany program w folderze /opt/bin/
+4. Umieścić skompilowany program w Qt i source do RPi "appcontroller" w folderze /opt/bin/
+5. Umieścić plik konfiguracyjny "appcontroller.conf" w folderze /etc/
+6a. ./appcontroller --make-default /opt/Reflex/bin/Reflex
+6b. /etc/init.d/qtapp start

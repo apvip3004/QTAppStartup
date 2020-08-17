@@ -1,0 +1,48 @@
+#! /bin/sh
+set -e
+
+QT_APP_PATH=/opt/bin/autorestart
+QT_APP_OPTS="/opt/bin/appcontroller /usr/bin/b2qt"
+
+PIDFILE=/var/run/qtapp.pid
+
+# source function library
+. /etc/init.d/functions
+
+
+test -x $QT_APP_PATH || exit 0
+
+
+case "$1" in
+  start)
+	echo "Starting Qt application $QT_APP_PATH: qtapp"
+	start-stop-daemon -b -m -S -p $PIDFILE -x $QT_APP_PATH -- $QT_APP_OPTS
+        echo "done."
+	;;
+  stop)
+	echo -n "Stopping Qt application $QT_APP_PATH: qtapp"
+	start-stop-daemon -K -p $PIDFILE -x $QT_APP_PATH
+	rm $PIDFILE
+        echo "."
+	;;
+
+  restart)
+        echo -n "Restarting Qt application $QT_APP_PATH: qtapp"
+	start-stop-daemon -K -p $PIDFILE --oknodo -x $QT_APP_PATH
+	rm $PIDFILE
+	sleep 2
+	start-stop-daemon -m -b -S -p $PIDFILE -x $QT_APP_PATH -- $QT_APP_OPTS
+	echo "."
+	;;
+
+  status)
+	status $QT_APP_PATH
+	exit $?
+  ;;
+
+  *)
+	echo "Usage: /etc/init.d/qtapp {start|stop|status|restart}"
+	exit 1
+esac
+
+exit 0
